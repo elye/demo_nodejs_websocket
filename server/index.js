@@ -13,16 +13,16 @@ wss.on("connection", ws => {
     ws.id = wss.getUniqueID();
     console.log(`New client connected with id: ${ws.id}`);
 
-    ws.on("message", data => {
+    ws.onmessage = ({data}) => {
         console.log(`Client ${ws.id}: ${data}`);
         wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(`${data}`);
             }
         });
-    });
+    };
 
-    ws.on("close", () => {
+    ws.onclose = function() {
         console.log(`Client ${ws.id} has disconnected!`);
-    });
+    };
 });
